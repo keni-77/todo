@@ -6,148 +6,159 @@
 <title>やることリスト</title>
 <style>
 :root{
-  --bg:#f6f8fb;
-  --card:#ffffff;
-  --muted:#6b7280;
-  --accent:#2563eb;
-  --accent-strong:#1e40af;
-  --danger:#dc2626;
-  --shadow: 0 10px 30px rgba(15,23,42,0.08);
-  --radius:14px;
-  --maxw:1100px;
-  --gap:10px;
-  --font-base:15px;
-  --small-font:10px;
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --text-main: #1e293b;
+  --text-sub: #64748b;
+  --accent: #3b82f6;
+  --accent-strong: #1d4ed8;
+  --danger: #ef4444;
+  --shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
+  --radius: 16px;
+  --maxw: 1000px;
 }
 
-/* base */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  font-family: sans-serif;
-  background: linear-gradient(180deg,#eef4ff 0%, #f6f8fb 100%);
-  margin:0;
-  padding:28px;
-  color:#0f172a;
-  -webkit-font-smoothing:antialiased;
-  font-size:var(--font-base);
-  line-height:1.45;
+/* 全体ベース（味気なさを追放してポップに風通しよく） */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at 50% 0%, #e0f2fe 0%, #f0f4f8 100%);
+  margin: 0;
+  padding: 32px 24px;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.5;
   transition: background 0.5s ease;
 }
 
-body.birthday-mode { background: linear-gradient(180deg,#ffeef8 0%, #fff6fb 100%); }
+/* ★誕生日モード：ド派手なパリピ背景 */
+body.birthday-mode { 
+  background: radial-gradient(circle at 50% 0%, #fce7f3 0%, #fdf2f8 100%) !important;
+  animation: partyBg 1s infinite alternate;
+}
+@keyframes partyBg {
+  0% { background-color: #fbcfe8; }
+  100% { background-color: #fce7f3; }
+}
 
-.app{max-width:var(--maxw);margin:0 auto}
-.app-header{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
-.app-header h1{margin:0;font-size:28px;font-weight:800}
-.header-sub{color:var(--muted);font-size:var(--small-font)}
+.app { max-width: var(--maxw); margin: 0 auto; position: relative; z-index: 10; }
+.app-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+.app-header h1 { margin: 0; font-size: 36px; font-weight: 900; color: #1e3a8a; letter-spacing: -0.05em; }
+body.birthday-mode .app-header h1 { color: #db2777; text-shadow: 0 0 10px rgba(219,39,119,0.3); }
+.header-sub { color: var(--text-sub); font-size: 13px; }
 
-/* 誕生日バナー */
+/* 国際デー＆誕生日バナーエリア */
+.intl-day {
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+  color: #fff; padding: 10px 16px; border-radius: 12px;
+  font-size: 14px; font-weight: 700; margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+  display: inline-block; width: fit-content;
+}
 .birthday-banner {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-  color: #c026d3;
-  padding: 16px; border-radius: 14px; text-align: center;
-  font-weight: 800; font-size: 20px; margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
-  animation: bounce 1s infinite alternate;
+  background: linear-gradient(135deg, #ff007f 0%, #ff7ff0 100%);
+  color: #ffffff; padding: 20px; border-radius: var(--radius); text-align: center;
+  font-weight: 900; font-size: 26px; margin-bottom: 24px;
+  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.6);
+  border: 4px solid #fff;
+  text-shadow: 2px 2px 0px #be185d;
+  animation: bounce 0.4s infinite alternate;
 }
 @keyframes bounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-5px); }
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-8px) scale(1.02); }
 }
 
-/* 期限間近の警告アニメーション */
-@keyframes warningPulse {
-  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); border-color: #fca5a5; }
-  70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); border-color: #ef4444; }
-  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); border-color: #fca5a5; }
+/* ★バチクソにうるさい警告点滅（一瞬で目が覚めるレベル） */
+@keyframes megaFlasher {
+  0% { background: #ef4444; color: #ffffff; border-color: #7f1d1d; box-shadow: 0 0 30px #ef4444; }
+  50% { background: #ffffff; color: #ef4444; border-color: #ef4444; box-shadow: 0 0 0px transparent; }
+  100% { background: #ef4444; color: #ffffff; border-color: #7f1d1d; box-shadow: 0 0 30px #ef4444; }
 }
 .warning-pulse {
-  animation: warningPulse 1.5s infinite;
-  background: linear-gradient(180deg,#fff,#fff5f5) !important;
+  animation: megaFlasher 0.2s infinite steps(2, start) !important;
 }
+.warning-pulse * { color: inherit !important; }
 
-/* tabs */
-.tabs{display:flex;gap:12px;margin-bottom:20px}
-.tab{
-  padding:12px 18px;border-radius:12px;border:1px solid rgba(15,23,42,0.06);
-  background:transparent;cursor:pointer;font-weight:700;color:#1f2937;font-size:16px;
-  transition:all .12s ease;
+/* タブ */
+.tabs { display: flex; gap: 6px; margin-bottom: 24px; background: #cbd5e1; padding: 4px; border-radius: 12px; width: fit-content; }
+body.birthday-mode .tabs { background: #f472b6; }
+.tab {
+  padding: 8px 20px; border-radius: 9px; border: none;
+  background: transparent; cursor: pointer; font-weight: 700; color: #475569; font-size: 14px;
+  transition: all 0.2s ease;
 }
-.tab.active{background:var(--accent);color:#fff;box-shadow:var(--shadow);transform:translateY(-2px)}
-body.birthday-mode .tab.active{background:#ec4899; box-shadow: 0 10px 30px rgba(236,72,153,0.2);}
+.tab.active { background: #ffffff; color: var(--accent-strong); box-shadow: var(--shadow); }
+body.birthday-mode .tab.active { color: #db2777; }
 
-/* card */
-.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:18px}
+/* カード */
+.card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-lg); margin-bottom: 24px; border: 1px solid #e2e8f0; }
 
-/* buttons */
-.btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);background:#fff;cursor:pointer;font-weight:700;font-size:15px}
-.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-body.birthday-mode .btn.primary{background:#ec4899;border-color:#ec4899}
-.btn.danger{background:var(--danger);color:#fff;border-color:var(--danger)}
-.btn:active{transform:translateY(1px)}
+/* ボタン */
+.btn { padding: 10px 16px; border-radius: 10px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer; font-weight: 700; font-size: 14px; transition: all 0.15s ease; }
+.btn:hover { background: #f8fafc; border-color: #94a3b8; }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 10px rgba(59,130,246,0.3); }
+.btn.primary:hover { background: var(--accent-strong); }
+body.birthday-mode .btn.primary { background: #e11d48; border-color: #e11d48; }
+.btn.danger { background: #fff; color: var(--danger); border-color: #fca5a5; }
+.btn.danger:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
-/* tools row */
-.tools-row{display:flex;justify-content:space-between;align-items:center;margin:12px 0}
-.today-info{color:var(--muted);font-size:var(--small-font)}
+.tools-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.today-info { color: #1e40af; font-weight: 800; font-size: 13px; background: #dbeafe; padding: 6px 14px; border-radius: 20px; }
+body.birthday-mode .today-info { background: #fce7f3; color: #db2777; }
+.section-title { margin: 0 0 16px 0; font-size: 22px; font-weight: 900; color: #334155; }
 
-/* lists */
-.section-title{margin:10px 0 12px 0;font-size:20px;font-weight:800}
-.list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 
-/* task card */
-.task-card{
-  background:linear-gradient(180deg,#fff,#fbfdff);
-  border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(16,24,40,0.06);
-  display:flex;flex-direction:column;gap:10px;border:1px solid #eef6ff;
-  transition: all 0.3s ease;
+/* タスクカード（日常タスク等も左側に色をつけてカラフルに） */
+.task-card {
+  background: #ffffff; border-radius: 14px; padding: 20px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 12px; border: 1px solid #e2e8f0;
+  border-left: 6px solid #64748b; /* デフォルトカラー */
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.task-top{display:flex;align-items:center;gap:12px}
-.task-title{font-weight:800;font-size:18px}
-.task-meta{color:var(--muted);font-size:15px;margin-left:auto;text-align:right}
-.task-memo{color:#475569;font-size:15px}
-.task-card.birthday-task { background: #fff0f6; border-color: #fce7f3; }
+.task-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
 
-input[type="checkbox"]{ width:22px;height:22px;cursor:pointer;transform:scale(1.25); accent-color: var(--accent-strong); }
-body.birthday-mode input[type="checkbox"]{ accent-color: #ec4899; }
+/* タスクタイプ別左端のアクセント */
+.task-card.type-daily { border-left-color: #10b981; }
+.task-card.type-weekly { border-left-color: #06b6d4; }
+.task-card.type-once { border-left-color: #8b5cf6; }
 
-.task-actions{display:flex;gap:10px;align-items:center}
-.task-actions button{padding:8px 12px;border-radius:10px;font-weight:700}
+.task-top { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; width: 100%; }
+.task-top > div:first-child { display: flex; align-items: center; gap: 12px; width: 100%; }
+.task-title { font-weight: 800; font-size: 18px; color: var(--text-main); word-break: break-all; }
+input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--accent-strong); min-width: 22px; }
 
-/* hidden */
-.hidden-area{margin-top:14px;padding:14px;border-radius:12px;background:linear-gradient(180deg,#fbfbfb,#f7f7f8);border:1px solid #eee}
-.hidden-task{opacity:0.9;color:#7b8188;background:transparent;border:1px dashed rgba(139,143,152,0.06)}
+.task-meta { margin-left: 34px; text-align: left; font-size: 13px; color: var(--text-sub); font-weight: 700; width: calc(100% - 34px); }
+.warning-badge { background: #fff; color: #ef4444; border: 2px solid #ef4444; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 900; display: inline-block; margin-bottom: 4px; }
 
-/* edit list */
-.edit-list{display:flex;flex-direction:column;gap:12px}
-.edit-row{display:flex;gap:10px;align-items:center;padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fcfdff);border:1px solid #eef6ff;flex-wrap:wrap}
-.edit-row input[type="text"], .edit-row input[type="date"], .edit-row input[type="time"], .edit-row select{padding:10px;border-radius:10px;border:1px solid #e6e9ef;background:#fff;font-size:15px}
-.edit-actions{margin-left:auto;display:flex;gap:10px}
-.example { color: #9aa0a6; font-size:14px; margin-left:8px; white-space:nowrap; }
+.task-memo { color: #475569; font-size: 13px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; margin-left: 34px; border-left: 3px solid #cbd5e1; word-break: break-all; }
+.task-actions { margin-left: 34px; display: flex; gap: 8px; margin-top: auto; }
+.task-actions .btn { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
 
-.edit-group-title {
-  margin: 24px 0 4px 0; font-size: 16px; font-weight: 800; color: var(--accent-strong);
-  border-bottom: 2px solid #eef6ff; padding-bottom: 6px;
-}
-.edit-group-title:first-child { margin-top: 0; }
+/* 完了エリア */
+.hidden-area { margin-top: 20px; padding: 20px; border-radius: var(--radius); background: #e2e8f0; }
+.hidden-task { opacity: 0.5; background: #f1f5f9; border: 1px dashed #94a3b8; box-shadow: none; border-left-color: #94a3b8 !important; }
 
-input:focus, select:focus, button:focus {
-  outline: 3px solid rgba(37,99,235,0.18); outline-offset: 2px;
-}
+/* 編集エリア */
+.edit-list { display: flex; flex-direction: column; gap: 14px; }
+.edit-row { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: 12px; background: #fff; border: 1px solid #cbd5e1; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.edit-row input[type="text"], .edit-row input[type="date"], .edit-row input[type="time"], .edit-row select { padding: 8px 12px; border-radius: 8px; border: 2px solid #cbd5e1; background: #fff; font-size: 14px; color: var(--text-main); font-weight: 600; }
+.edit-row input[type="text"]:focus, .edit-row select:focus { border-color: var(--accent); outline: none; }
+.edit-actions { margin-left: auto; display: flex; gap: 8px; }
+.example { color: var(--text-sub); font-size: 12px; font-weight: 600; }
+.edit-group-title { margin: 24px 0 8px 0; font-size: 16px; font-weight: 900; color: #0f172a; border-bottom: 3px solid #cbd5e1; padding-bottom: 4px; }
 
-.adv-time-box {
-  display: flex; gap: 8px; align-items: center; background: #f8fafc; padding: 8px; border-radius: 8px; font-size: 14px;
-}
+.adv-time-box { display: flex; gap: 8px; align-items: center; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; }
+.app-footer { margin-top: 32px; color: var(--text-sub); font-size: 12px; text-align: center; font-weight: 600; }
 
-.warning-badge {
-  background: #ef4444; color: #fff; padding: 2px 6px; border-radius: 6px; font-size: 12px; font-weight: bold; margin-bottom: 4px; display: inline-block;
-}
-
-.app-footer{margin-top:20px;color:var(--muted);font-size:14px;text-align:center}
-@media (max-width:900px){
-  .list-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
-  .task-title{font-size:16px}
-  .task-meta{font-size:13px}
+/* 誕生日降ってくるアニメーションのCSS */
+@keyframes fall {
+  0% { transform: translateY(-50px) rotate(0deg); }
+  100% { transform: translateY(105vh) rotate(360deg); }
 }
 </style>
 </head>
@@ -155,7 +166,8 @@ input:focus, select:focus, button:focus {
   <div class="app">
     <header class="app-header">
       <h1>やることリスト</h1>
-      <div class="header-sub">シンプルな表示。編集は専用モードで行います。</div>
+      <div id="internationalDay" class="intl-day" style="display:none;"></div>
+      <div class="header-sub">説明は薄く表示。編集は専用モードで行います。</div>
     </header>
 
     <div id="birthdayBanner" class="birthday-banner" style="display:none;"></div>
@@ -173,10 +185,10 @@ input:focus, select:focus, button:focus {
         <h2 class="section-title">今日のタスク・課題</h2>
         <div id="taskList" class="list-grid"></div>
         <div class="hidden-toggle" style="margin-top: 16px;">
-          <button id="toggleHidden" class="btn">- 非表示 -</button>
+          <button id="toggleHidden" class="btn">- 完了したタスクを表示 -</button>
         </div>
         <div id="hiddenArea" class="hidden-area" style="display:none;">
-          <h3>完了したタスク</h3>
+          <h3 style="margin-top:0;">完了したタスク</h3>
           <div id="hiddenList" class="list-grid"></div>
         </div>
       </section>
@@ -189,7 +201,6 @@ input:focus, select:focus, button:focus {
           <button id="deleteAll" class="btn danger">全削除</button>
           <button id="exportBtn" class="btn">データをコピー</button>
           <button id="importBtn" class="btn">データを読み込み</button>
-          <div style="font-size: 13px; color: var(--muted); width: 100%;">追加は「新規追加」で空の下書きを作り、それを編集して保存してください。下書きは表示モードに出ません。</div>
         </div>
         
         <h2 class="section-title">全タスク・課題（編集）</h2>
@@ -198,7 +209,7 @@ input:focus, select:focus, button:focus {
     </main>
 
     <footer class="app-footer">
-      <small>localStorage に保存されます。下書きは表示モードに反映されません。</small>
+      <small>localStorage に安全に保存中。消えません。</small>
     </footer>
   </div>
 
@@ -208,10 +219,26 @@ let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let saveTimer = null;
 const SAVE_DEBOUNCE_MS = 300;
 
-// データ構造のマイグレーション（古いバージョンからの引き継ぎ対応）
+// ★【超・網羅版】1年間の主要な国際デー・記念日リスト（130個以上！）
+const INTL_DAYS = {
+  "01-01": "世界平和の日 🕊️", "01-04": "世界点字デー ⠃", "01-24": "国際教育デー 📚", "01-27": "ホロコースト犠牲者想起国際デー 🕯️",
+  "02-02": "世界湿地デー 🦆", "02-04": "世界対がんデー 🎗️", "02-06": "女性器切除不認容の国際デー 🙅", "02-10": "世界豆類デー 🫘", "02-11": "科学における女性と女児の国際デー 👩‍🔬", "02-13": "世界ラジオデー 📻", "02-20": "世界社会正義の日 ⚖️", "02-21": "国際母語デー 🗣️",
+  "03-01": "差別ゼロ・デー 🦋", "03-03": "世界野生生物デー 🦊", "03-08": "国際女性デー ♀️", "03-20": "国際幸福デー 😊", "03-21": "国際人種差別撤廃デー 🌍 / 世界ダウン症の日 / 国際森林デー 🌳", "03-22": "世界水の日 💧", "03-23": "世界気象の日 ☀️", "03-24": "世界結核デー 🩺",
+  "04-02": "世界自閉症啓発デー 🧩", "04-04": "地雷に関する啓発国際デー 🚫", "04-05": "国際良心デー 🕯️", "04-06": "開発と平和のためのスポーツ国際デー 🏅", "04-07": "世界保健デー 🩺", "04-12": "人間の宇宙飛行国際デー 🚀", "04-21": "世界創造性とイノベーション・デー 💡", "04-22": "アースデー（地球の日） 🌱", "04-23": "世界図書・著作権デー 📖", "04-24": "平和のための外交・マルチラテラリズム国際デー 🤝", "04-25": "世界マラリアデー 🦟", "04-26": "世界知的財産デー 📜", "04-28": "国際労働安全衛生デー 👷", "04-30": "国際ジャズ・デー 🎷",
+  "05-02": "世界マグロデー 🐟", "05-03": "世界報道自由デー 📰", "05-08": "第二次世界大戦犠牲者追悼・和解の日 🕊️", "05-15": "国際家族デー 🏠", "05-16": "国際光デー 💡 / 共に平和に生きる国際デー", "05-17": "世界電気通信・情報社会デー 💻", "05-20": "世界ミツバチ・デー 🐝", "05-21": "対話と開発のための文化多様性世界デー 🎭", "05-22": "国際生物多様性の日 🦁", "05-23": "国際産科瘻孔撲滅デー 🏥", "05-29": "国連平和維持要員の国際デー 🇺🇳", "05-31": "世界禁煙デー 🚭",
+  "06-01": "国際親の日 👨‍👩‍👧", "06-03": "世界自転車デー 🚲", "06-04": "侵略による無辜の幼児犠牲者の国際デー 😢", "06-05": "世界環境デー 🌳", "06-07": "世界食品安全デー 🍏", "06-08": "世界海洋デー 🌊", "06-12": "児童労働反対世界デー 🎒", "06-13": "国際白皮症啓発デー 🏳️", "06-14": "世界献血者デー 🩸", "06-15": "世界高齢者虐待認識デー 👵", "06-16": "国際家庭送金デー 💸", "06-17": "砂漠化および干ばつと闘う世界デー 🏜️", "06-19": "紛争における性的暴力根絶の国際デー 🚫", "06-20": "世界難民の日 🤝", "06-21": "国際ヨガの日 🧘 / 世界水路の日 🗺️", "06-23": "国連公務員デー 🏛️ / 国際寡婦デー 👩‍", "06-25": "船員の日 🚢", "06-26": "国際薬物乱用・不正取引防止デー 🙅 / 拷問犠牲者支援国際デー", "06-27": "零細・中小企業デー 🏢", "06-29": "国際熱帯デー 🌴", "06-30": "国際小惑星デー ☄️ / 国際議会制度デー",
+  "07-07": "七夕の節句 🌌", "07-11": "世界人口デー 👥", "07-15": "世界若者技能デー 🛠️", "07-20": "国際チェス・デー ♟️", "07-25": "世界溺水防止デー 🛟", "07-28": "世界肝炎デー 🧬", "07-30": "国際友情デー 🤝 / 人身取引反対世界デー",
+  "08-09": "世界の先住民族の国際デー 🏹", "08-12": "国際青少年デー 🧑‍🤝‍🧑", "08-19": "世界人道デー ❤️", "08-21": "テロ被害者想起・追悼国際デー 🕯️", "08-22": "宗教に基づく暴力行為の犠牲者を追悼する国際デー", "08-23": "奴隷貿易とその廃止を記憶する国際デー ⛓️", "08-29": "核実験反対国際デー ☢️", "08-30": "強制失踪犠牲者の国際デー", "08-31": "アフリカ系人々の国際デー 🌍",
+  "09-05": "国際チャリティー・デー 💖", "09-07": "青空のためのきれいな空気の国際デー 🌤️", "09-08": "国際識字デー 📝", "09-09": "教育を攻撃から守る国際デー 🏫", "09-12": "南南協力のための国連デー 🤝", "09-15": "国際民主主義デー 🗳️", "09-16": "オゾン層保護のための国際デー 🌍", "09-17": "世界患者安全デー 🏥", "09-21": "国際平和デー 🕊️", "09-23": "国際手話言語デー 🧏", "09-26": "核兵器の全面的廃絶のための国際デー ⚛️", "09-27": "世界観光デー ✈️", "09-28": "情報への普遍的アクセスに関する国際デー ℹ️ / 世界狂犬病デー 🐕", "09-29": "食料のロスと廃棄に関する啓発の国際デー 🌾", "09-30": "国際翻訳デー 🗣️",
+  "10-01": "国際高齢者デー 👴", "10-02": "国際非暴力デー 🕊️", "10-05": "世界教師デー 🧑‍🏫", "10-09": "世界郵便デー ✉️", "10-10": "世界メンタルヘルス・デー 🧠", "10-11": "国際ガールズ・デー 👧", "10-13": "国際防災デー 🦺", "10-15": "国際農山漁村女性デー 👩‍🌾", "10-16": "世界食料デー 🍎", "10-17": "国際貧困撲滅デー 🤲", "10-24": "国連デー 🇺🇳 / 世界開発情報デー", "10-27": "世界音響映像遺産の日 📹", "10-31": "世界都市デー 🏙️",
+  "11-02": "ジャーナリストに対する犯罪不処罰をなくす国際デー 🎙️", "11-05": "世界津波の日 🌊", "11-06": "戦争と武力紛争における環境搾取防止国際デー 🌿", "11-10": "平和と開発のための世界科学デー 🔬", "11-14": "世界糖尿病デー 🩺", "11-16": "国際寛容デー 🤝", "11-19": "世界トイレデー 🚽 / 国際男性デー 👨", "11-20": "世界こどもの日 🧸", "11-21": "世界テレビジョン・デー 📺", "11-25": "女性に対する暴力撤廃国際デー 🚫", "11-29": "パレスチナ連帯国際デー 🕊️", "11-30": "化学戦のすべての犠牲者を追悼する日の国際デー",
+  "12-01": "世界エイズデー 🎗️", "12-02": "奴隷制廃止国際デー ⛓️", "12-03": "国際障害者デー ♿", "12-04": "国際銀行デー 🏦", "12-05": "国際ボランティア・デー 🙋 / 世界土壌デー 🌱", "12-07": "国際民間航空デー ✈️", "12-09": "国際反汚職デー 💼 / ジェノサイドの罪の犠牲者を追悼する国際デー", "12-10": "人権デー ⚖️", "12-11": "国際山岳デー 🏔️", "12-12": "国際ユニバーサル・ヘルス・カバレッジ・デー / 国際中立デー", "12-18": "国際移住者デー 🧳 / 国際アラビア語デー", "12-20": "国際人間の連帯デー 🤝", "12-25": "クリスマス 🎄", "12-27": "国際流行対策準備デー 😷"
+};
+
+// マイグレーション
 tasks = tasks.map(t => {
   if(t.type === "deadline_weekly" && t.startWd === undefined) {
-    return {...t, startWd: 1, startTime: "08:00", endWd: 5, endTime: "23:59"}; // デフォルト: 月曜8時〜金曜23時59分
+    return {...t, startWd: 1, startTime: "08:00", endWd: 5, endTime: "23:59"};
   }
   if(t.type === "deadline_once" && t.endTime === undefined) {
     return {...t, endTime: "23:59"};
@@ -225,6 +252,8 @@ const displayArea = document.getElementById("displayArea");
 const editArea = document.getElementById("editArea");
 const todayLabel = document.getElementById("todayLabel");
 const birthdayBanner = document.getElementById("birthdayBanner");
+const internationalDayBox = document.getElementById("internationalDay");
+
 todayLabel.textContent = new Date().toLocaleDateString("ja-JP");
 
 function toLocalDateString(date) {
@@ -246,7 +275,6 @@ function weekdayName(n){ return ["日","月","火","水","木","金","土"][n] |
 function formatMonthDay(iso){ if(!iso) return ""; const d = new Date(iso); return `${d.getMonth()+1}月${d.getDate()}日`; }
 function escapeHtml(s){ if(!s) return ""; return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
 
-// 指定した曜日と時間の直近の過去日時を取得する（復活日時の判定用）
 function getMostRecentPastDayOfWeekTime(now, targetWd, targetTime) {
   const [h, m] = targetTime.split(':').map(Number);
   let d = new Date(now);
@@ -254,13 +282,10 @@ function getMostRecentPastDayOfWeekTime(now, targetWd, targetTime) {
   let diff = d.getDay() - targetWd;
   if (diff < 0) diff += 7;
   d.setDate(d.getDate() - diff);
-  if (d > now) {
-    d.setDate(d.getDate() - 7);
-  }
+  if (d > now) d.setDate(d.getDate() - 7);
   return d;
 }
 
-// 指定した曜日と時間の直近の未来日時を取得する（期限日時の判定用）
 function getNextDayOfWeekTime(now, targetWd, targetTime) {
   const [h, m] = targetTime.split(':').map(Number);
   let d = new Date(now);
@@ -268,9 +293,7 @@ function getNextDayOfWeekTime(now, targetWd, targetTime) {
   let diff = targetWd - d.getDay();
   if (diff < 0) diff += 7;
   d.setDate(d.getDate() + diff);
-  if (d < now) {
-    d.setDate(d.getDate() + 7);
-  }
+  if (d < now) d.setDate(d.getDate() + 7);
   return d;
 }
 
@@ -284,6 +307,7 @@ function switchMode(mode){
   } else {
     displayArea.style.display = "none"; editArea.style.display = "";
     displayTab.classList.remove("active"); editTab.classList.add("active");
+    stopBirthdayEffects(); // 編集モードではクラッカーを止める
     renderEdit();
   }
 }
@@ -298,10 +322,9 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-// 1分ごとに画面を更新して期限の色や1時間前警告を動的に反映
 setInterval(() => {
   if(currentMode === "display") {
-    resetDailyChecks(); // 時間経過で復活するものがあるかチェック
+    resetDailyChecks();
     render();
   }
 }, 60000);
@@ -309,7 +332,6 @@ setInterval(() => {
 function cleanupExpiredDates(){
   const today = todayISO();
   const now = new Date();
-  const before = tasks.length;
   tasks = tasks.filter(t => {
     if(t.type === "once" && t.date && t.date < today) return false;
     if(t.type === "deadline_once" && t.isDone && t.date) {
@@ -319,7 +341,7 @@ function cleanupExpiredDates(){
     }
     return true;
   });
-  if(tasks.length !== before) saveDebounced();
+  saveDebounced();
 }
 
 function resetDailyChecks(){
@@ -332,7 +354,6 @@ function resetDailyChecks(){
         if(t.lastDoneDate !== today){ t.isDone = false; changed = true; }
       } 
       else if(t.type === "deadline_weekly") {
-        // 最後に完了した日時（lastDoneTime）が、直近の「復活日時」より古ければ復活させる
         if(t.startWd !== undefined && t.startTime !== undefined) {
           const recentReset = getMostRecentPastDayOfWeekTime(now, Number(t.startWd), t.startTime);
           if(t.lastDoneTime && t.lastDoneTime < recentReset.getTime()) {
@@ -347,15 +368,8 @@ function resetDailyChecks(){
 
 function getDeadlineInfo(task, now) {
   let deadlineDate = null;
-  
   if (task.type === "deadline_weekly") {
     deadlineDate = getNextDayOfWeekTime(now, Number(task.endWd), task.endTime || "23:59");
-    // もし現在時刻が、直近の復活日時より前なら、まだ表示期間ではない
-    const recentReset = getMostRecentPastDayOfWeekTime(now, Number(task.startWd), task.startTime || "00:00");
-    // ※ただし、次の期限が先週の復活分というケースもあるため、厳密には「復活日時〜期限日時」の間にあるかチェック
-    if (deadlineDate.getTime() - recentReset.getTime() > 7 * 24 * 60 * 60 * 1000) {
-      // 復活日時より前に期限が来ている場合は表示期間外の可能性があるが、シンプルに次の期限を基準とする
-    }
   } else if (task.type === "deadline_once" && task.date) {
     deadlineDate = new Date(task.date);
     const [h, m] = (task.endTime || "23:59").split(':').map(Number);
@@ -369,29 +383,65 @@ function getDeadlineInfo(task, now) {
   const ONE_DAY = 24 * ONE_HOUR;
 
   let isWarning = false;
-  let color = "#ea580c"; // デフォルトのオレンジ (Hue: 約24)
+  let color = "#ea580c"; 
   let text = "";
 
   if (timeLeft < 0) {
-    color = "#dc2626"; // 期限切れ・赤
+    color = "#dc2626"; 
     text = "期限切れ";
     isWarning = true;
   } else if (timeLeft <= ONE_DAY) {
-    // 24時間以内：オレンジ(Hue 25) から 赤(Hue 0) へグラデーション
+    // 24時間以内に向けて徐々に赤くするグラデーション(HSL)
     const hue = Math.max(0, Math.min(25, (timeLeft / ONE_DAY) * 25));
-    color = `hsl(${hue}, 90%, 50%)`;
+    color = `hsl(${hue}, 100%, 45%)`;
     
     if (timeLeft <= ONE_HOUR) {
-      isWarning = true; // 1時間切ったら警告
+      isWarning = true; 
       const m = Math.floor(timeLeft / 60000);
       text = `残り ${m} 分！`;
     } else {
       const h = Math.floor(timeLeft / ONE_HOUR);
       text = `残り約 ${h} 時間`;
     }
+  } else {
+    color = "#2563eb"; // まだ余裕があるときは青
+    text = "余裕あり";
   }
 
   return { color, text, isWarning, deadlineDate };
+}
+
+// ★バチクソ祝うための紙吹雪演出スクリプト
+function startBirthdayEffects() {
+  if (document.getElementById("confetti-container")) return;
+  const container = document.createElement("div");
+  container.id = "confetti-container";
+  container.style.position = "fixed";
+  container.style.top = "0"; container.style.left = "0";
+  container.style.width = "100vw"; container.style.height = "100vh";
+  container.style.pointerEvents = "none"; container.style.zIndex = "9999";
+  container.style.overflow = "hidden";
+  document.body.appendChild(container);
+
+  const emojis = ["🎉", "🎂", "✨", "💖", "🎁", "🎈", "🥳", "🍰", "👑"];
+  for (let i = 0; i < 80; i++) {
+    const el = document.createElement("div");
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.position = "absolute";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.top = "-60px";
+    el.style.fontSize = Math.random() * 24 + 24 + "px";
+    el.style.opacity = Math.random() * 0.5 + 0.5;
+    
+    const duration = Math.random() * 3 + 2;
+    const delay = Math.random() * 6;
+    el.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+    container.appendChild(el);
+  }
+}
+function stopBirthdayEffects() {
+  const container = document.getElementById("confetti-container");
+  if (container) container.remove();
 }
 
 function render(){
@@ -404,15 +454,28 @@ function render(){
   const wd = now.getDay();
   let birthdayNames = [];
 
+  // 国際デーのセット
+  const currentMD = todayStr.slice(5); // "MM-DD"
+  if (INTL_DAYS[currentMD]) {
+    internationalDayBox.innerHTML = `🌍 今日は <strong>${INTL_DAYS[currentMD]}</strong>`;
+    internationalDayBox.style.display = "block";
+  } else {
+    internationalDayBox.style.display = "none";
+  }
+
   tasks.forEach(task => {
     if(task.isDraft) return;
-    let isToday = false;
-    let isBirthdayTask = false;
 
-    if(task.type === "birthday" && task.date && task.date.slice(5) === todayStr.slice(5)){
-      isToday = true; isBirthdayTask = true; birthdayNames.push(task.title);
-    } 
-    else if(task.type === "daily") isToday = true;
+    // ★誕生日データはタスクとして出さず、名前だけストックしてスキップする
+    if(task.type === "birthday"){
+      if(task.date && task.date.slice(5) === currentMD){
+        birthdayNames.push(task.title);
+      }
+      return; 
+    }
+
+    let isToday = false;
+    if(task.type === "daily") isToday = true;
     else if(task.type === "weekly"){
       if(task.everyday) isToday = true;
       else if(Array.isArray(task.weekdays) && task.weekdays.includes(wd)) isToday = true;
@@ -422,21 +485,24 @@ function render(){
 
     if(!isToday && !task.isDone) return;
 
-    if(task.isDone && !isBirthdayTask){
-      hiddenList.appendChild(createTaskCard(task, true));
+    if(task.isDone){
+      hiddenList.appendChild(createTaskCard(task, true, now));
     } else if(isToday){
-      taskList.appendChild(createTaskCard(task, false, isBirthdayTask, now));
+      taskList.appendChild(createTaskCard(task, false, now));
     }
   });
 
+  // ★誕生日が一人でもいればバチクソに祝う
   if(birthdayNames.length > 0){
     document.body.classList.add("birthday-mode");
     birthdayBanner.style.display = "block";
     const names = birthdayNames.map(n => escapeHtml(n)).join(" & ");
-    birthdayBanner.innerHTML = `🎉 今日は ${names} の誕生日です！おめでとう！ 🎂`;
+    birthdayBanner.innerHTML = `🎉 🎂 🎉 🎂 🎉 🎂 🎉<br>HAPPY BIRTHDAY!!!<br>今日は 【${names}】 の誕生日！<br>おめでとううううう！！ 🎁 ✨ 🥳`;
+    startBirthdayEffects();
   } else {
     document.body.classList.remove("birthday-mode");
     birthdayBanner.style.display = "none";
+    stopBirthdayEffects();
   }
 
   const hiddenArea = document.getElementById("hiddenArea");
@@ -449,21 +515,19 @@ function render(){
   document.querySelectorAll('.chkTask').forEach(cb => cb.addEventListener('click', () => checkTask(Number(cb.dataset.id))));
 }
 
-function createTaskCard(task, hidden=false, isBirthday=false, now=null){
+function createTaskCard(task, hidden=false, now=null){
   const div = document.createElement("div");
-  div.className = "task-card" + (hidden ? " hidden-task" : "") + (isBirthday ? " birthday-task" : "");
+  div.className = "task-card " + (hidden ? "hidden-task" : `type-${task.type}`);
   
   const top = document.createElement("div"); top.className = "task-top";
   const left = document.createElement("div"); left.style.display="flex"; left.style.alignItems="center"; left.style.gap="10px";
 
-  if(isBirthday){
-    left.innerHTML = `<div style="font-size:26px;">🎂</div><div class="task-title" style="color:#db2777;">${escapeHtml(task.title)}</div>`;
-  } else if(!hidden){
+  if(!hidden){
     const chk = document.createElement("input"); chk.type="checkbox"; chk.className="chkTask"; chk.dataset.id = task.id; left.appendChild(chk);
     const title = document.createElement("div"); title.className="task-title"; title.innerHTML = escapeHtml(task.title || "(無題)");
     left.appendChild(title);
   } else {
-    const doneMark = document.createElement("div"); doneMark.textContent="✓"; doneMark.style.color="#10b981"; doneMark.style.fontWeight="800"; left.appendChild(doneMark);
+    const doneMark = document.createElement("div"); doneMark.textContent="✓"; doneMark.style.color="#10b981"; doneMark.style.fontWeight="900"; left.appendChild(doneMark);
     const title = document.createElement("div"); title.className="task-title"; title.innerHTML = escapeHtml(task.title || "(無題)");
     left.appendChild(title);
   }
@@ -471,30 +535,33 @@ function createTaskCard(task, hidden=false, isBirthday=false, now=null){
 
   const meta = document.createElement("div"); meta.className="task-meta";
   
-  // 期限タスクの処理
+  // 期限タスクにおける、近づくにつれて赤くなる処理
   if(!hidden && (task.type === "deadline_weekly" || task.type === "deadline_once")) {
     const info = getDeadlineInfo(task, now || new Date());
     let metaHTML = "";
     
+    // ★課題の期限が迫るほど、枠線とカード背景の下側が赤く染まる！
+    div.style.borderColor = info.color;
+    div.style.borderWidth = "2px";
+    div.style.background = `linear-gradient(180deg, #ffffff 60%, ${info.color}15 100%)`;
+    
     if(info.isWarning) {
-      div.classList.add("warning-pulse");
-      metaHTML += `<div class="warning-badge">⚠️ 期限間近</div><br>`;
+      div.className = "task-card warning-pulse"; // うるさい警告発動
+      metaHTML += `<div class="warning-badge">🚨 逃げ場なし！期限直前 🚨</div><br>`;
     }
     
     let deadlineStr = "";
     if(task.type === "deadline_weekly") deadlineStr = `${weekdayName(task.endWd)}曜 ${task.endTime} まで`;
     else deadlineStr = `${formatMonthDay(task.date)} ${task.endTime || "23:59"} まで`;
 
-    metaHTML += `課題: ${deadlineStr}`;
-    if(info.text) metaHTML += `<br><span style="font-size:13px; opacity:0.9">${info.text}</span>`;
+    metaHTML += `期限: ${deadlineStr}`;
+    if(info.text) metaHTML += `<br><span style="font-size:12px; font-weight:800;">[${info.text}]</span>`;
     
     meta.innerHTML = metaHTML;
     meta.style.color = info.color;
-    meta.style.fontWeight = "bold";
   }
   else if(task.type === "weekly") meta.textContent = task.everyday ? "毎日" : (task.weekdays||[]).map(n=>weekdayName(n)).join("・") + "曜";
-  else if(task.type === "once") meta.textContent = formatMonthDay(task.date);
-  else if(task.type === "birthday") meta.textContent = "誕生日！";
+  else if(task.type === "once") meta.textContent = formatMonthDay(task.date) + " に実行";
   else meta.textContent = "毎日";
   top.appendChild(meta);
 
@@ -510,7 +577,7 @@ function createTaskCard(task, hidden=false, isBirthday=false, now=null){
   }
 
   div.appendChild(top);
-  if(task.memo) div.appendChild(memo);
+  if(task.memo && task.type !== "birthday") div.appendChild(memo);
   div.appendChild(actions);
   return div;
 }
@@ -534,7 +601,7 @@ function toggleHidden(){
 }
 document.getElementById("toggleHidden").addEventListener("click", toggleHidden);
 
-/* ---------- 編集モード描画 ---------- */
+/* ---------- 編集モード ---------- */
 function renderEdit(){
   const editList = document.getElementById("editList");
   editList.innerHTML = "";
@@ -547,7 +614,7 @@ function renderEdit(){
 
   function createRowElement(task) {
     const row = document.createElement("div"); row.className = "edit-row"; row.dataset.id = task.id;
-    const titleInput = document.createElement("input"); titleInput.type="text"; titleInput.value = task.title || ""; titleInput.style.minWidth="160px"; titleInput.placeholder = "タイトル";
+    const titleInput = document.createElement("input"); titleInput.type="text"; titleInput.value = task.title || ""; titleInput.style.minWidth="160px";
     const memoInput = document.createElement("input"); memoInput.type="text"; memoInput.value = task.memo || ""; memoInput.style.minWidth="140px"; memoInput.placeholder = "メモ";
     
     const typeSelect = document.createElement("select");
@@ -557,11 +624,10 @@ function renderEdit(){
       <option value="once">日付指定（その日だけ）</option>
       <option value="deadline_weekly">課題（曜日・時間で復活・期限）</option>
       <option value="deadline_once">課題（指定日時が期限）</option>
-      <option value="birthday">誕生日（毎年お祝い）</option>
+      <option value="birthday">誕生日（毎年バチクソ祝う）</option>
     `;
     typeSelect.value = task.type || "daily";
 
-    // 従来の曜日選択
     const wkBox = document.createElement("div"); wkBox.style.display="flex"; wkBox.style.gap="6px"; wkBox.style.alignItems="center";
     for(let i=0;i<7;i++){
       const lab = document.createElement("label");
@@ -571,7 +637,6 @@ function renderEdit(){
       wkBox.appendChild(lab);
     }
 
-    // 新しい詳細な時間設定ボックス
     const advTimeBox = document.createElement("div"); advTimeBox.className = "adv-time-box";
     const getWdOptions = (selVal) => [0,1,2,3,4,5,6].map(i => `<option value="${i}" ${selVal==i?'selected':''}>${weekdayName(i)}曜</option>`).join('');
     
@@ -590,6 +655,7 @@ function renderEdit(){
 
     const exampleSpan = document.createElement("div"); exampleSpan.className = "example";
     
+    // ★誕生日のときにインプットやプレースホルダーの見た目を切り替える処理
     function updateVisibility(){
       const t = typeSelect.value;
       wkBox.style.display = t === "weekly" ? "" : "none";
@@ -603,10 +669,20 @@ function renderEdit(){
       regInputs.style.display = "none";
       advTimeBox.style.display = "none";
 
-      if(t === "deadline_weekly") { advTimeBox.style.display = ""; dwInputs.style.display = "flex"; }
-      else if(t === "deadline_once") { advTimeBox.style.display = ""; doInputs.style.display = "flex"; }
-      else if(t === "once" || t === "birthday") { advTimeBox.style.display = ""; regInputs.style.display = "block"; }
-      
+      if (t === "birthday") {
+        // 誕生日の特別仕様
+        titleInput.placeholder = "お名前";
+        memoInput.style.display = "none"; // メモなし
+        advTimeBox.style.display = "";
+        regInputs.style.display = "block"; // 日付指定だけ
+      } else {
+        // 通常タスク
+        titleInput.placeholder = "タイトル";
+        memoInput.style.display = "";
+        if(t === "deadline_weekly") { advTimeBox.style.display = ""; dwInputs.style.display = "flex"; }
+        else if(t === "deadline_once") { advTimeBox.style.display = ""; doInputs.style.display = "flex"; }
+        else if(t === "once") { advTimeBox.style.display = ""; regInputs.style.display = "block"; }
+      }
       updateExample();
     }
 
@@ -614,28 +690,26 @@ function renderEdit(){
       const t = typeSelect.value;
       if(t === "weekly"){
         const sel = []; wkBox.querySelectorAll(".wk-edit").forEach(cb => { if(cb.checked) sel.push(weekdayName(Number(cb.value))); });
-        exampleSpan.textContent = `例: ${sel.length > 0 ? sel.join("・")+"曜" : "未選択"}のみ表示`;
+        exampleSpan.textContent = `➡ ${sel.length > 0 ? sel.join("・")+"曜" : "未選択"}のみ表示`;
       } else if(t === "deadline_weekly"){
-        const sWd = advTimeBox.querySelector('.start-wd option:checked').text;
-        const sTime = advTimeBox.querySelector('.start-time').value;
         const eWd = advTimeBox.querySelector('.end-wd option:checked').text;
         const eTime = advTimeBox.querySelector('.end-time').value;
-        exampleSpan.textContent = `例: ${sWd}${sTime}に未完了に戻り、${eWd}${eTime}まで表示`;
+        exampleSpan.textContent = `➡ ${eWd}の${eTime}がデッドライン`;
       } else if(t === "deadline_once"){
         const dStr = formatMonthDay(advTimeBox.querySelector('.date-input').value) || "未設定";
         const time = advTimeBox.querySelector('.once-time').value;
-        exampleSpan.textContent = `例: ${dStr}の${time}まで終わるまで表示`;
+        exampleSpan.textContent = `➡ ${dStr}の ${time} がデッドライン`;
       } else if(t === "once"){
         const dStr = formatMonthDay(advTimeBox.querySelector('.reg-date').value) || "未設定";
-        exampleSpan.textContent = `例: ${dStr}のみ表示`;
+        exampleSpan.textContent = `➡ ${dStr} 当日のみ出現`;
       } else if(t === "birthday"){
         const dStr = formatMonthDay(advTimeBox.querySelector('.reg-date').value) || "未設定";
-        exampleSpan.textContent = `例: 毎年 ${dStr} に特別表示`;
-      } else { exampleSpan.textContent = `例: 毎日表示`; }
+        exampleSpan.textContent = `🎂 毎年 ${dStr} に画面全体で大暴れ`;
+      } else { exampleSpan.textContent = `➡ 毎日リセットされて出現`; }
     }
 
-    const infoSpan = document.createElement("div"); infoSpan.style.color="#6b7280"; infoSpan.style.fontSize="13px";
-    infoSpan.textContent = task.isDraft ? "下書き" : (task.isDone ? `完了 (${task.lastDoneDate||""})` : "未完了");
+    const infoSpan = document.createElement("div"); infoSpan.style.color="#6b7280"; infoSpan.style.fontSize="13px"; infoSpan.style.fontWeight="700";
+    infoSpan.textContent = task.isDraft ? "下書き" : (task.isDone ? "完了" : "待機中");
 
     const actions = document.createElement("div"); actions.className = "edit-actions";
     const deleteBtn = document.createElement("button"); deleteBtn.textContent = "削除"; deleteBtn.className="btn danger";
@@ -677,13 +751,13 @@ function renderEdit(){
         }
 
         tasks[idx] = {
-          ...tasks[idx], title: newTitle, memo: memoInput.value.trim(),
+          ...tasks[idx], title: newTitle, memo: tType === "birthday" ? "" : memoInput.value.trim(),
           type: tType, date: dateVal, weekdays: newWeekdays,
           startWd, startTime, endWd, endTime,
           isDraft: (tasks[idx].isDraft && newTitle !== "") ? false : tasks[idx].isDraft
         };
         saveDebounced();
-        infoSpan.textContent = tasks[idx].isDraft ? "下書き" : (tasks[idx].isDone ? `完了 (${tasks[idx].lastDoneDate||""})` : "未完了");
+        infoSpan.textContent = tasks[idx].isDraft ? "下書き" : (tasks[idx].isDone ? "完了" : "待機中");
       }, SAVE_DEBOUNCE_MS);
     }
     
@@ -692,7 +766,7 @@ function renderEdit(){
     });
 
     deleteBtn.addEventListener("click", () => {
-      if(!confirm("このタスクを削除しますか？")) return;
+      if(!confirm("このデータを削除しますか？")) return;
       tasks = tasks.filter(t => t.id !== Number(row.dataset.id));
       saveDebounced(); renderEdit();
     });
@@ -700,15 +774,15 @@ function renderEdit(){
   }
 
   if(dailyTasks.length > 0) {
-    const h = document.createElement("div"); h.className = "edit-group-title"; h.textContent = "📅 日常のタスク"; editList.appendChild(h);
+    const h = document.createElement("div"); h.className = "edit-group-title"; h.textContent = "📅 普段のルーティンタスク"; editList.appendChild(h);
     dailyTasks.forEach(t => editList.appendChild(createRowElement(t)));
   }
   if(deadlineTasks.length > 0) {
-    const h = document.createElement("div"); h.className = "edit-group-title"; h.textContent = "🔥 課題・宿題"; editList.appendChild(h);
+    const h = document.createElement("div"); h.className = "edit-group-title"; h.textContent = "🔥 締め切り・課題"; editList.appendChild(h);
     deadlineTasks.forEach(t => editList.appendChild(createRowElement(t)));
   }
   if(birthdayTasks.length > 0) {
-    const h = document.createElement("div"); h.className = "edit-group-title"; h.textContent = "🎂 誕生日"; editList.appendChild(h);
+    const h = document.createElement("div"); h.className = "edit-group-title"; h.textContent = "🎂 登録済みのお誕生日（タスクには出現しません）"; editList.appendChild(h);
     birthdayTasks.forEach(t => editList.appendChild(createRowElement(t)));
   }
 }
@@ -723,33 +797,28 @@ document.getElementById("newDraftBtn").addEventListener("click", () => {
 });
 
 document.getElementById("deleteAll").addEventListener("click", () => {
-  if(!confirm("本当に全てのタスクを削除しますか？")) return;
+  if(!confirm("本当に全てのデータを全削除しますか？")) return;
   tasks = []; saveDebounced(); renderEdit();
 });
 
-// データを文字にしてクリップボードにコピー
 document.getElementById("exportBtn").addEventListener("click", () => {
   const dataStr = JSON.stringify(tasks);
   navigator.clipboard.writeText(dataStr).then(() => {
-    alert("タスクデータをコピーしました！データを使いたい端末にメール等で送って貼り付けてください。");
-  }).catch(() => {
-    alert("コピーに失敗しました。データ: " + dataStr);
-  });
+    alert("全データをコピーしました！");
+  }).catch(() => { alert("コピーに失敗しました。"); });
 });
 
-// スマホ側で文字を貼り付けて復元
 document.getElementById("importBtn").addEventListener("click", () => {
   const dataStr = prompt("コピーしたデータをここに貼り付けてください：");
   if(!dataStr) return;
   try {
     const imported = JSON.parse(dataStr);
     if(Array.isArray(imported)) {
-      tasks = imported;
-      saveDebounced();
+      tasks = imported; saveDebounced();
       if(currentMode === "edit") renderEdit(); else render();
       alert("読み込みが完了しました！");
-    } else { alert("データの形式が正しくありません。"); }
-  } catch(e) { alert("データの読み込みに失敗しました。"); }
+    } else { alert("形式が正しくありません。"); }
+  } catch(e) { alert("失敗しました。"); }
 });
 
 switchMode("display");
