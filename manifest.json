@@ -3,8 +3,10 @@
   "short_name": "神TODO",
   "start_url": "./index.html",
   "display": "standalone",
+  
   "background_color": "#f0f4f8",
   "theme_color": "#3b82f6",
+  
   "icons": [
     {
       "src": "https://via.placeholder.com/192",
