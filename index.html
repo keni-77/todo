@@ -163,6 +163,22 @@ input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-colo
 </style>
 </head>
 <body>
+  <div id="animation-splash" style="
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #1e293b; color: #ffffff; z-index: 99999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease, visibility 0.5s;
+  ">
+    <div id="splash-logo" style="font-size: 28px; font-weight: 900; letter-spacing: 2px; animation: pulse 1.2s infinite alternate;">
+      🔥 神 TODO LIST LOADING...
+    </div>
+  </div>
+  <style>
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.5; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+  </style>
   <div class="app">
     <header class="app-header">
       <h1>やることリスト</h1>
@@ -822,6 +838,19 @@ document.getElementById("importBtn").addEventListener("click", () => {
 });
 
 switchMode("display");
+
+// 🚀 アプリ起動から1.5秒後に、アニメーション画面をフワッと消す
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const splash = document.getElementById("animation-splash");
+    if (splash) {
+      splash.style.opacity = "0";
+      splash.style.visibility = "hidden";
+      // アニメーションが終わったら完全に要素を削除して、操作の邪魔にならないようにする
+      setTimeout(() => splash.remove(), 500);
+    }
+  }, 1500); // 1500ミリ秒（1.5秒）表示する
+});
 </script>
 </body>
 </html>
