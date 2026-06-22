@@ -1,6 +1,6 @@
 {
-  "name": "やることリスト",
-  "short_name": "神TODO",
+  "name": "Note ToDo",
+  "short_name": "Notodo",
   "start_url": "./index.html",
   "display": "standalone",
   
