@@ -1,0 +1,155 @@
+:root{
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --text-main: #1e293b;
+  --text-sub: #64748b;
+  --accent: #3b82f6;
+  --accent-strong: #1d4ed8;
+  --danger: #ef4444;
+  --shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
+  --radius: 16px;
+  --maxw: 1000px;
+}
+
+/* 全体ベース（味気なさを追放してポップに風通しよく） */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at 50% 0%, #e0f2fe 0%, #f0f4f8 100%);
+  margin: 0;
+  padding: 32px 24px;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.5;
+  transition: background 0.5s ease;
+}
+
+/* ★誕生日モード：ド派手なパリピ背景 */
+body.birthday-mode { 
+  background: radial-gradient(circle at 50% 0%, #fce7f3 0%, #fdf2f8 100%) !important;
+  animation: partyBg 1s infinite alternate;
+}
+@keyframes partyBg {
+  0% { background-color: #fbcfe8; }
+  100% { background-color: #fce7f3; }
+}
+
+.app { max-width: var(--maxw); margin: 0 auto; position: relative; z-index: 10; }
+.app-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+.app-header h1 { margin: 0; font-size: 36px; font-weight: 900; color: #1e3a8a; letter-spacing: -0.05em; }
+body.birthday-mode .app-header h1 { color: #db2777; text-shadow: 0 0 10px rgba(219,39,119,0.3); }
+.header-sub { color: var(--text-sub); font-size: 13px; }
+
+/* 国際デー＆誕生日バナーエリア */
+.intl-day {
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+  color: #fff; padding: 10px 16px; border-radius: 12px;
+  font-size: 14px; font-weight: 700; margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+  display: inline-block; width: fit-content;
+}
+.birthday-banner {
+  background: linear-gradient(135deg, #ff007f 0%, #ff7ff0 100%);
+  color: #ffffff; padding: 20px; border-radius: var(--radius); text-align: center;
+  font-weight: 900; font-size: 26px; margin-bottom: 24px;
+  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.6);
+  border: 4px solid #fff;
+  text-shadow: 2px 2px 0px #be185d;
+  animation: bounce 0.4s infinite alternate;
+}
+@keyframes bounce {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-8px) scale(1.02); }
+}
+
+/* ★バチクソにうるさい警告点滅（一瞬で目が覚めるレベル） */
+@keyframes megaFlasher {
+  0% { background: #ef4444; color: #ffffff; border-color: #7f1d1d; box-shadow: 0 0 30px #ef4444; }
+  50% { background: #ffffff; color: #ef4444; border-color: #ef4444; box-shadow: 0 0 0px transparent; }
+  100% { background: #ef4444; color: #ffffff; border-color: #7f1d1d; box-shadow: 0 0 30px #ef4444; }
+}
+.warning-pulse {
+  animation: megaFlasher 0.2s infinite steps(2, start) !important;
+}
+.warning-pulse * { color: inherit !important; }
+
+/* タブ */
+.tabs { display: flex; gap: 6px; margin-bottom: 24px; background: #cbd5e1; padding: 4px; border-radius: 12px; width: fit-content; }
+body.birthday-mode .tabs { background: #f472b6; }
+.tab {
+  padding: 8px 20px; border-radius: 9px; border: none;
+  background: transparent; cursor: pointer; font-weight: 700; color: #475569; font-size: 14px;
+  transition: all 0.2s ease;
+}
+.tab.active { background: #ffffff; color: var(--accent-strong); box-shadow: var(--shadow); }
+body.birthday-mode .tab.active { color: #db2777; }
+
+/* カード */
+.card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-lg); margin-bottom: 24px; border: 1px solid #e2e8f0; }
+
+/* ボタン */
+.btn { padding: 10px 16px; border-radius: 10px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer; font-weight: 700; font-size: 14px; transition: all 0.15s ease; }
+.btn:hover { background: #f8fafc; border-color: #94a3b8; }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 10px rgba(59,130,246,0.3); }
+.btn.primary:hover { background: var(--accent-strong); }
+body.birthday-mode .btn.primary { background: #e11d48; border-color: #e11d48; }
+.btn.danger { background: #fff; color: var(--danger); border-color: #fca5a5; }
+.btn.danger:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+.tools-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.today-info { color: #1e40af; font-weight: 800; font-size: 13px; background: #dbeafe; padding: 6px 14px; border-radius: 20px; }
+body.birthday-mode .today-info { background: #fce7f3; color: #db2777; }
+.section-title { margin: 0 0 16px 0; font-size: 22px; font-weight: 900; color: #334155; }
+
+.list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+
+/* タスクカード（日常タスク等も左側に色をつけてカラフルに） */
+.task-card {
+  background: #ffffff; border-radius: 14px; padding: 20px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 12px; border: 1px solid #e2e8f0;
+  border-left: 6px solid #64748b; /* デフォルトカラー */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.task-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
+
+/* タスクタイプ別左端のアクセント */
+.task-card.type-daily { border-left-color: #10b981; }
+.task-card.type-weekly { border-left-color: #06b6d4; }
+.task-card.type-once { border-left-color: #8b5cf6; }
+
+.task-top { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; width: 100%; }
+.task-top > div:first-child { display: flex; align-items: center; gap: 12px; width: 100%; }
+.task-title { font-weight: 800; font-size: 18px; color: var(--text-main); word-break: break-all; }
+input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--accent-strong); min-width: 22px; }
+
+.task-meta { margin-left: 34px; text-align: left; font-size: 13px; color: var(--text-sub); font-weight: 700; width: calc(100% - 34px); }
+.warning-badge { background: #fff; color: #ef4444; border: 2px solid #ef4444; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 900; display: inline-block; margin-bottom: 4px; }
+
+.task-memo { color: #475569; font-size: 13px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; margin-left: 34px; border-left: 3px solid #cbd5e1; word-break: break-all; }
+.task-actions { margin-left: 34px; display: flex; gap: 8px; margin-top: auto; }
+.task-actions .btn { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+
+/* 完了エリア */
+.hidden-area { margin-top: 20px; padding: 20px; border-radius: var(--radius); background: #e2e8f0; }
+.hidden-task { opacity: 0.5; background: #f1f5f9; border: 1px dashed #94a3b8; box-shadow: none; border-left-color: #94a3b8 !important; }
+
+/* 編集エリア */
+.edit-list { display: flex; flex-direction: column; gap: 14px; }
+.edit-row { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: 12px; background: #fff; border: 1px solid #cbd5e1; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.edit-row input[type="text"], .edit-row input[type="date"], .edit-row input[type="time"], .edit-row select { padding: 8px 12px; border-radius: 8px; border: 2px solid #cbd5e1; background: #fff; font-size: 14px; color: var(--text-main); font-weight: 600; }
+.edit-row input[type="text"]:focus, .edit-row select:focus { border-color: var(--accent); outline: none; }
+.edit-actions { margin-left: auto; display: flex; gap: 8px; }
+.example { color: var(--text-sub); font-size: 12px; font-weight: 600; }
+.edit-group-title { margin: 24px 0 8px 0; font-size: 16px; font-weight: 900; color: #0f172a; border-bottom: 3px solid #cbd5e1; padding-bottom: 4px; }
+
+.adv-time-box { display: flex; gap: 8px; align-items: center; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; }
+.app-footer { margin-top: 32px; color: var(--text-sub); font-size: 12px; text-align: center; font-weight: 600; }
+
+/* 誕生日降ってくるアニメーションのCSS */
+@keyframes fall {
+  0% { transform: translateY(-50px) rotate(0deg); }
+  100% { transform: translateY(105vh) rotate(360deg); }
+}
