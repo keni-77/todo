@@ -3,6 +3,24 @@ let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let saveTimer = null;
 const SAVE_DEBOUNCE_MS = 300;
 
+// --- ここから追加 ---
+const priorityLabels = {
+  5: "👑 神の託宣",
+  4: "🔥 烈火の如く",
+  3: "⚔️ 日常の戦い",
+  2: "☕ 気が向けば",
+  1: "🍃 忘却の彼方"
+};
+
+const typeLabels = {
+  'daily': "🔁 毎日",
+  'weekly': "📅 毎週",
+  'once': "✨ 単発",
+  'deadline_weekly': "🔥 課題(週)",
+  'deadline_once': "🔥 課題(単)"
+};
+// --- ここまで追加 ---
+
 // ★【超・網羅版】1年間の主要な国際デー・記念日リスト（130個以上！）
 const INTL_DAYS = {
   "01-01": "世界平和の日 🕊️", "01-04": "世界点字デー ⠃", "01-24": "国際教育デー 📚", "01-27": "ホロコースト犠牲者想起国際デー 🕯️",
@@ -247,6 +265,20 @@ function render(){
     internationalDayBox.style.display = "none";
   }
 
+  // ★追加：表示する直前に、重要度(5→1) ＞ 頻度 の順にタスクをソートする
+  tasks.sort((a, b) => {
+    // 【第1優先】重要度（5 から 1 の順）。設定がない場合は3とする
+    const priA = a.priority || 3;
+    const priB = b.priority || 3;
+    if (priB !== priA) return priB - priA;
+
+    // 【第2優先】頻度
+    const typeOrder = { 'daily': 1, 'weekly': 2, 'once': 3, 'deadline_weekly': 3, 'deadline_once': 3, 'birthday': 5 };
+    const orderA = typeOrder[a.type] || 4;
+    const orderB = typeOrder[b.type] || 4;
+    return orderA - orderB;
+  });
+
   tasks.forEach(task => {
     if(task.isDraft) return;
 
@@ -301,6 +333,7 @@ function render(){
 
 function createTaskCard(task, hidden=false, now=null){
   const div = document.createElement("div");
+  // ★クラス名に type-${task.type} を組み込み
   div.className = "task-card " + (hidden ? "hidden-task" : `type-${task.type}`);
   
   const top = document.createElement("div"); top.className = "task-top";
@@ -316,6 +349,19 @@ function createTaskCard(task, hidden=false, now=null){
     left.appendChild(title);
   }
   top.appendChild(left);
+
+  // ★追加：タイトルのすぐ下に2つのバッジ（重要度と頻度）を挟み込む
+  if (!hidden && task.type !== "birthday") {
+    const badgeContainer = document.createElement("div");
+    badgeContainer.className = "task-badges";
+    
+    const pLevel = task.priority || 3;
+    badgeContainer.innerHTML = `
+      <span class="badge-priority p-${pLevel}">${priorityLabels[pLevel] || "⚔️ 日常の戦い"}</span>
+      <span class="badge-type t-${task.type}">${typeLabels[task.type] || "⚙️ タスク"}</span>
+    `;
+    top.appendChild(badgeContainer);
+  }
 
   const meta = document.createElement("div"); meta.className="task-meta";
   
@@ -412,6 +458,18 @@ function renderEdit(){
     `;
     typeSelect.value = task.type || "daily";
 
+    // ★追加：重要度を選ぶセレクトボックスを作る
+    const prioritySelect = document.createElement("select");
+    prioritySelect.className = "priority-edit";
+    prioritySelect.innerHTML = `
+      <option value="5">👑 神の託宣 (重要度5)</option>
+      <option value="4">🔥 烈火の如く (重要度4)</option>
+      <option value="3">⚔️ 日常の戦い (重要度3)</option>
+      <option value="2">☕ 気が向けば (重要度2)</option>
+      <option value="1">🍃 忘却の彼方 (重要度1)</option>
+    `;
+    prioritySelect.value = task.priority || 3;
+
     const wkBox = document.createElement("div"); wkBox.style.display="flex"; wkBox.style.gap="6px"; wkBox.style.alignItems="center";
     for(let i=0;i<7;i++){
       const lab = document.createElement("label");
@@ -457,12 +515,14 @@ function renderEdit(){
         // 誕生日の特別仕様
         titleInput.placeholder = "お名前";
         memoInput.style.display = "none"; // メモなし
+        prioritySelect.style.display = "none"; // ★誕生日に重要度は不要
         advTimeBox.style.display = "";
         regInputs.style.display = "block"; // 日付指定だけ
       } else {
         // 通常タスク
         titleInput.placeholder = "タイトル";
         memoInput.style.display = "";
+        prioritySelect.style.display = ""; // ★重要度を表示
         if(t === "deadline_weekly") { advTimeBox.style.display = ""; dwInputs.style.display = "flex"; }
         else if(t === "deadline_once") { advTimeBox.style.display = ""; doInputs.style.display = "flex"; }
         else if(t === "once") { advTimeBox.style.display = ""; regInputs.style.display = "block"; }
@@ -499,8 +559,15 @@ function renderEdit(){
     const deleteBtn = document.createElement("button"); deleteBtn.textContent = "削除"; deleteBtn.className="btn danger";
     actions.appendChild(deleteBtn);
 
-    row.appendChild(titleInput); row.appendChild(memoInput); row.appendChild(typeSelect);
-    row.appendChild(wkBox); row.appendChild(advTimeBox); row.appendChild(exampleSpan); row.appendChild(infoSpan); row.appendChild(actions);
+    row.appendChild(titleInput); 
+    row.appendChild(memoInput); 
+    row.appendChild(typeSelect);
+    row.appendChild(prioritySelect); // ★追加：重要度の選択肢を画面に配置
+    row.appendChild(wkBox); 
+    row.appendChild(advTimeBox); 
+    row.appendChild(exampleSpan); 
+    row.appendChild(infoSpan); 
+    row.appendChild(actions);
 
     updateVisibility();
     typeSelect.addEventListener("change", updateVisibility);
@@ -520,6 +587,8 @@ function renderEdit(){
         wkBox.querySelectorAll(".wk-edit").forEach(cb => { if(cb.checked) newWeekdays.push(Number(cb.value)); });
 
         const tType = typeSelect.value;
+        const pVal = parseInt(prioritySelect.value) || 3; // ★追加：選択された重要度を取得
+        
         let dateVal = "", startWd = 1, startTime = "08:00", endWd = 5, endTime = "23:59";
         
         if (tType === "deadline_weekly") {
@@ -536,7 +605,8 @@ function renderEdit(){
 
         tasks[idx] = {
           ...tasks[idx], title: newTitle, memo: tType === "birthday" ? "" : memoInput.value.trim(),
-          type: tType, date: dateVal, weekdays: newWeekdays,
+          type: tType, priority: pVal, // ★追加：保存データに重要度を反映
+          date: dateVal, weekdays: newWeekdays,
           startWd, startTime, endWd, endTime,
           isDraft: (tasks[idx].isDraft && newTitle !== "") ? false : tasks[idx].isDraft
         };
@@ -545,7 +615,8 @@ function renderEdit(){
       }, SAVE_DEBOUNCE_MS);
     }
     
-    [titleInput, memoInput, typeSelect, ...wkBox.querySelectorAll(".wk-edit"), ...advTimeBox.querySelectorAll("input, select")].forEach(el => {
+    // ★追加：prioritySelectをイベント監視リストに追加
+    [prioritySelect, titleInput, memoInput, typeSelect, ...wkBox.querySelectorAll(".wk-edit"), ...advTimeBox.querySelectorAll("input, select")].forEach(el => {
       el.addEventListener("input", autoSave); el.addEventListener("change", autoSave);
     });
 
@@ -572,7 +643,8 @@ function renderEdit(){
 }
 
 document.getElementById("newDraftBtn").addEventListener("click", () => {
-  const draft = { id: Date.now(), title: "", memo: "", type: "daily", weekdays: [], everyday: false, date: "", isDone: false, lastDoneDate: "", isDraft: true };
+  // ★追加：priority: 3 をデフォルトで設定
+  const draft = { id: Date.now(), title: "", memo: "", type: "daily", priority: 3, weekdays: [], everyday: false, date: "", isDone: false, lastDoneDate: "", isDraft: true };
   tasks.unshift(draft); saveDebounced(); switchMode("edit");
   setTimeout(()=> {
     renderEdit(); const el = document.querySelector(`#editList .edit-row[data-id='${draft.id}']`);
