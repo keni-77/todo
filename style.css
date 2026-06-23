@@ -106,24 +106,59 @@ body.birthday-mode .today-info { background: #fce7f3; color: #db2777; }
 
 .list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 
-/* タスクカード（日常タスク等も左側に色をつけてカラフルに） */
+/* 🛠️ タスクカード（すっきり2px枠線＋極薄背景で文字を引き立てる） */
 .task-card {
-  background: #ffffff; border-radius: 14px; padding: 20px; box-shadow: var(--shadow);
-  display: flex; flex-direction: column; gap: 12px; border: 1px solid #e2e8f0;
-  border-left: 6px solid #64748b; /* デフォルトカラー */
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 2px solid #cbd5e1; /* デフォルトの枠線 */
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 .task-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
 
-/* タスクタイプ別左端のアクセント */
-.task-card.type-daily { border-left-color: #10b981; }
-.task-card.type-weekly { border-left-color: #06b6d4; }
-.task-card.type-once { border-left-color: #8b5cf6; }
+/* 頻度別の枠線と、文字が見やすい超薄い背景色 */
+.task-card.type-daily { border-color: #10b981; background: #f0fdf4; }
+.task-card.type-weekly { border-color: #06b6d4; background: #ecfeff; }
+.task-card.type-once { border-color: #8b5cf6; background: #f5f3ff; }
 
 .task-top { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; width: 100%; }
 .task-top > div:first-child { display: flex; align-items: center; gap: 12px; width: 100%; }
 .task-title { font-weight: 800; font-size: 18px; color: var(--text-main); word-break: break-all; }
 input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--accent-strong); min-width: 22px; }
+
+/* 🏷️ バッジエリアのレイアウト（新規追加） */
+.task-badges {
+  margin-left: 34px; /* チェックボックスの右側に綺麗に整列 */
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* バッジ共通の装飾 */
+.badge-priority, .badge-type {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+/* 重要度（プライオリティ）別の配色デザイン */
+.badge-priority.p-5 { background: #fee2e2; color: #ef4444; border-color: #fca5a5; } /* 👑5 */
+.badge-priority.p-4 { background: #ffedd5; color: #f97316; border-color: #fed7aa; } /* 🔥4 */
+.badge-priority.p-3 { background: #f1f5f9; color: #475569; border-color: #cbd5e1; } /* ⚔️3 */
+.badge-priority.p-2 { background: #ecfeff; color: #0891b2; border-color: #a5f3fc; } /* ☕2 */
+.badge-priority.p-1 { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; } /* 🍃1 */
+
+/* 頻度バッジの色 */
+.badge-type.t-daily { background: #10b981; color: #ffffff; }
+.badge-type.t-weekly { background: #06b6d4; color: #ffffff; }
+.badge-type.t-once { background: #8b5cf6; color: #ffffff; }
 
 .task-meta { margin-left: 34px; text-align: left; font-size: 13px; color: var(--text-sub); font-weight: 700; width: calc(100% - 34px); }
 .warning-badge { background: #fff; color: #ef4444; border: 2px solid #ef4444; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 900; display: inline-block; margin-bottom: 4px; }
@@ -134,7 +169,7 @@ input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-colo
 
 /* 完了エリア */
 .hidden-area { margin-top: 20px; padding: 20px; border-radius: var(--radius); background: #e2e8f0; }
-.hidden-task { opacity: 0.5; background: #f1f5f9; border: 1px dashed #94a3b8; box-shadow: none; border-left-color: #94a3b8 !important; }
+.hidden-task { opacity: 0.5; background: #f1f5f9; border: 1px dashed #94a3b8; box-shadow: none; border-color: #94a3b8 !important; }
 
 /* 編集エリア */
 .edit-list { display: flex; flex-direction: column; gap: 14px; }
