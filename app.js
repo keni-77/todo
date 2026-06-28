@@ -484,8 +484,8 @@ function renderEdit(){
     
     advTimeBox.innerHTML = `
       <div class="deadline-weekly-inputs" style="display:flex; gap:10px; align-items:center;">
-        <div>復活: <select class="start-wd">${getWdOptions(task.startWd || 1)}</select> <input type="time" class="start-time" value="${task.startTime || '08:00'}"></div>
-        <div>期限: <select class="end-wd">${getWdOptions(task.endWd || 5)}</select> <input type="time" class="end-time" value="${task.endTime || '23:59'}"></div>
+        <div>復活: <select class="start-wd">${getWdOptions(task.startWd !== undefined ? task.startWd : 1)}</select> <input type="time" class="start-time" value="${task.startTime || '08:00'}"></div>
+        <div>期限: <select class="end-wd">${getWdOptions(task.endWd !== undefined ? task.endWd : 5)}</select> <input type="time" class="end-time" value="${task.endTime || '23:59'}"></div>
       </div>
       <div class="deadline-once-inputs" style="display:flex; gap:10px; align-items:center;">
         <div>期限: <input type="date" class="date-input" value="${task.date || ''}"> <input type="time" class="once-time" value="${task.endTime || '23:59'}"></div>
